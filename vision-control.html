@@ -1,77 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <title>Computer vision control for robotics | Daniel Nawrot</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;700;800&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-</head>
-
-<body>
-    <div class="wrap">
-        <nav aria-label="Primary"><a href="index.html"><strong>Daniel Nawrot</strong></a>
-            <div class="links"><a href="index.html">Home</a><a href="projects.html" aria-current="page">Projects</a><a
-                    href="mailto:daniel.nawrot@mail.utoronto.ca">Contact</a></div>
-        </nav>
-        <main class="page"><a class="back" href="projects.html">&larr; All projects</a>
-            <h1>Computer vision control for robotics</h1>
-            <p class="tags">Python, MediaPipe, PyBullet, Matplotlib</p>
-            <p>A framework for controlling a robotic arm with computer vision. Robotics is moving toward integrating
-                vision and AI into physical systems, so I set out to build a system that turns the motion of a user’s
-                hand into arm control. I split it into mini-projects, each a milestone and each teaching one fundamental
-                concept.</p>
-            <p><a href="https://github.com/DanielNawrot">Code on GitHub</a></p>
-            <h2>1. 2D inverse kinematics</h2>
-            <p>Forward kinematics converts joint angles into an endpoint position. That’s of limited use in practice,
-                because it’s more useful to choose where the endpoint should be and solve for the angles. That is
-                inverse kinematics.</p>
-            <p>I implemented it in Python and visualized it with Matplotlib. You give the arm a start pose and a target,
-                and it solves for the joint angles and animates into position.</p>
-            <div class="ph">Figure: IK algorithm steps and arm parameters</div>
-            <div class="ph">Figure: Matplotlib arm visualization</div>
-            <h2>2. PID controller</h2>
-            <p>Joints driven by servos or motors need a controller that gives stable, tunable motion. A PID controller
-                takes a setpoint and the current value. The proportional term responds to the current error, the
-                integral term to the accumulated error, and the derivative term to the error’s rate of change. Their sum
-                drives the process, and tuning the three gains gives smooth control.</p>
-            <p>I built it in Python and plotted responses for different P, I and D values, starting at 0 with a setpoint
-                of 90 and then changing it to 0.</p>
-            <div class="ph">Figure: PID block diagram</div>
-            <div class="gallery"><img src="Pictures/PID_1.png" alt="PID controller response plot" loading="lazy"><img
-                    src="Pictures/PID_2.png" alt="PID controller response plot with different gains" loading="lazy">
-            </div>
-            <h2>3. Hand tracking</h2>
-            <p>MediaPipe’s Pose Landmark Detection tracks the user’s hand in real time. Pressing a button zeros an
-                origin at the hand’s current position, and the program tracks the vector from that origin to the hand.
-                That vector is meant to control the robot’s endpoint. I extended it with a motion-capture mode that
-                records a path with its timing, so speed is preserved.</p>
-            <div class="gallery"><img src="Pictures/Robot_Video_Control_1.mp4" alt="Hand tracking demo"
-                    loading="lazy"><img src="Pictures/Robot_Video_Control_2.mp4" alt="Hand tracking demo"
-                    loading="lazy"></div>
-            <h2>4. Smoothing and spline interpolation</h2>
-            <p>Recorded hand data is noisy. An exponential moving average (EMA) filter biases toward the previous value,
-                so inaccurate spikes have less influence.</p>
-            <div class="eq">s₀ = x₀
-                sₜ = α·xₜ + (1 − α)·sₜ₋₁, t &gt; 0 (0 &lt; α &lt; 1)</div>
-            <p>I then fit a smoothing spline, a curve that balances closeness to the data against its own curvature
-                rather than passing through every point. The result is a function of time for the recorded 3D path.</p>
-            <div class="ph">Plots: raw points, EMA-filtered points, smoothing spline</div>
-            <h2>5. Physics simulation</h2>
-            <p>To close the loop, I used PyBullet to simulate a robotic arm in a physics environment. I used a pre-built
-                arm model and programmed it to follow the recorded path.</p>
-            <video controls muted loop playsinline preload="metadata" src="Pictures/Robot_Video_Control_3.mp4"></video>
-            <!-- Add: what you'd do next, challenges you hit, and any measured results. -->
-        </main>
-    </div>
-    <footer>
-        <div class="wrap">Daniel Nawrot, University of Toronto Mechanical Engineering &middot; <a
-                href="https://github.com/DanielNawrot">GitHub</a></div>
-    </footer>
-</body>
-
-</html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Computer vision control for robotics | Daniel Nawrot</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css"></head><body>
+<div class="wrap"><nav aria-label="Primary"><a href="index.html"><strong>Daniel Nawrot</strong></a>
+<div class="links"><a href="index.html">Home</a><a href="projects.html" aria-current="page">Projects</a><a href="mailto:daniel.nawrot@mail.utoronto.ca">Contact</a></div></nav>
+<main class="page"><a class="back" href="projects.html">&larr; All projects</a>
+<h1>Computer vision control for robotics</h1>
+<p class="tags">Python, MediaPipe, PyBullet, Matplotlib</p>
+<p>A framework for controlling a robotic arm with computer vision. Robotics is moving toward integrating vision and AI into physical systems, so I set out to build a system that turns the motion of a user’s hand into arm control. I split it into mini-projects, each a milestone and each teaching one fundamental concept.</p>
+<figure class="img"><img src="Pictures/Vision_Control_Control_Pipeline_FlowChart.png" alt="Flowchart of the computer vision control pipeline" loading="lazy"></figure>
+<p><a href="https://github.com/DanielNawrot">Code on GitHub</a></p>
+<h2>1. 2D inverse kinematics</h2>
+<p>Forward kinematics converts joint angles into an endpoint position. That’s of limited use in practice, because it’s more useful to choose where the endpoint should be and solve for the angles. That is inverse kinematics.</p>
+<p>I implemented it in Python and visualized it with Matplotlib. You give the arm a start pose and a target, and it solves for the joint angles and animates into position.</p>
+<figure class="img"><img src="Pictures/IK_1.png" alt="Inverse kinematics algorithm" loading="lazy"></figure><figure class="img"><img src="Pictures/IK_2.png" alt="Two-link arm parameters" loading="lazy"></figure><figure class="img"><img src="Pictures/IK_3.png" alt="Matplotlib visualization of the 2D arm reaching a target" loading="lazy"></figure>
+<h2>2. PID controller</h2>
+<p>Joints driven by servos or motors need a controller that gives stable, tunable motion. A PID controller takes a setpoint and the current value. The proportional term responds to the current error, the integral term to the accumulated error, and the derivative term to the error’s rate of change. Their sum drives the process, and tuning the three gains gives smooth control.</p>
+<p>I built it in Python and plotted responses for different P, I and D values, starting at 0 with a setpoint of 90 and then changing it to 0.</p>
+<figure class="img"><img src="Pictures/PID_Diagram.svg" alt="PID controller block diagram" loading="lazy"></figure><div class="gallery"><img src="Pictures/PID_1.png" alt="PID response plot" loading="lazy"><img src="Pictures/PID_2.png" alt="PID response plot with different gains" loading="lazy"></div>
+<h2>3. Hand tracking</h2>
+<p>MediaPipe’s Pose Landmark Detection tracks the user’s hand in real time. Pressing a button zeros an origin at the hand’s current position, and the program tracks the vector from that origin to the hand. That vector is meant to control the robot’s endpoint. I extended it with a motion-capture mode that records a path with its timing, so speed is preserved.</p>
+<div class="gallery"><video autoplay muted loop playsinline controls preload="metadata" aria-label="Hand tracking demo" src="Pictures/Robot_Video_Control_1.mp4"></video><video autoplay muted loop playsinline controls preload="metadata" aria-label="Hand tracking demo" src="Pictures/Robot_Video_Control_2.mp4"></video></div>
+<h2>4. Smoothing and spline interpolation</h2>
+<p>Recorded hand data is noisy. An exponential moving average (EMA) filter biases toward the previous value, so inaccurate spikes have less influence.</p>
+<div class="eq">s₀ = x₀
+sₜ = α·xₜ + (1 − α)·sₜ₋₁,  t &gt; 0   (0 &lt; α &lt; 1)</div>
+<div class="gallery"><img src="Pictures/Recording_Unfiltered.png" alt="Recorded 3D hand path before filtering" loading="lazy"><img src="Pictures/Recording_Filtered.png" alt="Recorded path after EMA filtering" loading="lazy"></div>
+<p>I then fit a smoothing spline, a curve that balances closeness to the data against its own curvature rather than passing through every point. The result is a function of time for the recorded 3D path.</p>
+<figure class="img"><img src="Pictures/Recording_Smoothing_Spline.png" alt="Smoothing spline fitted to the filtered points" loading="lazy"></figure><div class="gallery"><img src="Pictures/Recording_Smoothed.png" alt="Smoothed recorded path" loading="lazy"><img src="Pictures/Recording_Smoothed_2.png" alt="Smoothed recorded path, second view" loading="lazy"></div>
+<h2>5. Physics simulation</h2>
+<p>To close the loop, I used PyBullet to simulate a robotic arm in a physics environment. I used a pre-built arm model and programmed it to follow the recorded path.</p>
+<video autoplay muted loop playsinline controls preload="metadata" aria-label="Simulated robot arm following the recorded path" src="Pictures/Robot_Video_Control_3.mp4"></video>
+<!-- Add: what you'd do next, challenges you hit, and any measured results. --></main>
+</div>
+<footer><div class="wrap">Daniel Nawrot, University of Toronto Mechanical Engineering &middot; <a href="https://github.com/DanielNawrot">GitHub</a></div></footer>
+</body></html>
