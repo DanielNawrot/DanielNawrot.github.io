@@ -1,25 +1,54 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Cycloidal drive CAD model | Daniel Nawrot</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css"></head><body>
-<div class="wrap"><nav aria-label="Primary"><a href="index.html"><strong>Daniel Nawrot</strong></a>
-<div class="links"><a href="index.html">Home</a><a href="projects.html" aria-current="page">Projects</a><a href="mailto:daniel.nawrot@mail.utoronto.ca">Contact</a></div></nav>
-<main class="page"><a class="back" href="projects.html">&larr; All projects</a>
-<h1>Cycloidal drive CAD model</h1>
-<p class="tags">3D CAD, speed reduction, robotic actuation</p>
-<p>A cycloidal drive is an unusual approach to speed reduction. An eccentric bearing is attached to a cycloidal disc, which rolls against pins lining the outside of the drive. The output turns in the opposite direction to the input.</p>
-<p>The advantages are minimal backlash, high torque and a compact size, which makes it a good fit for robotic joints.</p>
-<h2>Design</h2>
-<p>The reduction ratio depends on the number of roller pins and the number of lobes on the disc.</p>
-<div class="eq">r = (P − L) / P
-P = number of roller pins
-L = number of lobes on the disc</div>
-<p>I used two discs, because a single disc is unbalanced and likely to cause vibration.</p>
-<div class="gallery"><img src="Pictures/Cycloidal_Drive_1.png" alt="Cycloidal drive CAD render 1" loading="lazy"><img src="Pictures/Cycloidal_Drive_2.png" alt="Cycloidal drive CAD render 2" loading="lazy"><img src="Pictures/Cycloidal_Drive_3.png" alt="Cycloidal drive CAD render 3" loading="lazy"><img src="Pictures/Cycloidal_Drive_4.png" alt="Cycloidal drive CAD render 4" loading="lazy"><img src="Pictures/Cycloidal_Drive_5.png" alt="Cycloidal drive CAD render 5" loading="lazy"><img src="Pictures/Cycloidal_Drive_6.png" alt="Cycloidal drive CAD render 6" loading="lazy"></div>
-<!-- Add: your P and L values, the resulting ratio, materials, motor choice, and what you’d change. --></main>
-</div>
-<footer><div class="wrap">Daniel Nawrot, University of Toronto Mechanical Engineering &middot; <a href="https://github.com/DanielNawrot">GitHub</a></div></footer>
-</body></html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Cycloidal drive CAD model | Daniel Nawrot</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'\\(',right:'\\)',display:false}]})"></script>
+</head>
+
+<body>
+    <div class="wrap">
+        <nav aria-label="Primary"><a href="index.html"><strong>Daniel Nawrot</strong></a>
+            <div class="links"><a href="index.html">Home</a><a href="projects.html" aria-current="page">Projects</a><a
+                    href="mailto:daniel.nawrot@mail.utoronto.ca">Contact</a></div>
+        </nav>
+        <main class="page"><a class="back" href="projects.html">&larr; All projects</a>
+            <h1>Cycloidal drive CAD model</h1>
+            <p class="tags">3D CAD, speed reduction, robotic actuation</p>
+            <p>A cycloidal drive is an unusual approach to speed reduction. An eccentric bearing is attached to a
+                cycloidal disc, which rolls against pins lining the outside of the drive. The output turns in the
+                opposite direction to the input.</p>
+            <p>The advantages are minimal backlash, high torque and a compact size, which makes it a good fit for
+                robotic joints.</p>
+            <h2>Design</h2>
+            <p>The reduction ratio depends on the number of roller pins and the number of lobes on the disc.</p>
+            <div class="eq math">$$r=\frac{P-L}{P}$$</div>
+            <p>where \(P\) is the number of roller pins and \(L\) is the number of lobes on the disc.</p>
+            <p>I used two discs, because a single disc is unbalanced and likely to cause vibration.</p>
+            <div class="gallery"><img src="Pictures/Cycloidal_Drive_1.png" alt="Cycloidal drive CAD render 1"
+                    loading="lazy"><img src="Pictures/Cycloidal_Drive_2.png" alt="Cycloidal drive CAD render 2"
+                    loading="lazy"><img src="Pictures/Cycloidal_Drive_3.png" alt="Cycloidal drive CAD render 3"
+                    loading="lazy"><img src="Pictures/Cycloidal_Drive_4.png" alt="Cycloidal drive CAD render 4"
+                    loading="lazy"><img src="Pictures/Cycloidal_Drive_5.png" alt="Cycloidal drive CAD render 5"
+                    loading="lazy"><img src="Pictures/Cycloidal_Drive_6.png" alt="Cycloidal drive CAD render 6"
+                    loading="lazy"></div>
+            <!-- Add: your P and L values, the resulting ratio, materials, motor choice, and what you’d change. -->
+        </main>
+    </div>
+    <footer>
+        <div class="wrap">Daniel Nawrot, University of Toronto Mechanical Engineering &middot; <a
+                href="https://github.com/DanielNawrot">GitHub</a></div>
+    </footer>
+</body>
+
+</html>
