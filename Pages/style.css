@@ -44,3 +44,7 @@ figure.img img{width:100%;height:auto;border-radius:4px}
 figcaption{color:var(--mute);font-size:.9rem;margin-top:.4rem}
 footer{border-top:1px solid var(--rule);padding:2rem 0 2.5rem;color:var(--mute);font-size:.95rem}
 @media(max-width:820px){.hero{grid-template-columns:1fr;padding-top:1.5rem}.interests{grid-template-columns:1fr 1fr}}
+.gallery{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin:1.2rem 0}
+.gallery img,.page video{width:100%;height:auto;border-radius:4px;display:block;background:var(--panel)}
+.page video{margin:1.2rem 0}
+@media(max-width:560px){.gallery{grid-template-columns:1fr}}

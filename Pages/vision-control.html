@@ -19,10 +19,10 @@
 <h2>2. PID controller</h2>
 <p>Joints driven by servos or motors need a controller that gives stable, tunable motion. A PID controller takes a setpoint and the current value. The proportional term responds to the current error, the integral term to the accumulated error, and the derivative term to the error’s rate of change. Their sum drives the process, and tuning the three gains gives smooth control.</p>
 <p>I built it in Python and plotted responses for different P, I and D values, starting at 0 with a setpoint of 90 and then changing it to 0.</p>
-<div class="ph">Figure: PID block diagram</div><div class="ph">Plots: PID response with different gains</div>
+<div class="ph">Figure: PID block diagram</div><div class="gallery"><img src="Pictures/PID_1.png" alt="PID controller response plot" loading="lazy"><img src="Pictures/PID_2.png" alt="PID controller response plot with different gains" loading="lazy"></div>
 <h2>3. Hand tracking</h2>
 <p>MediaPipe’s Pose Landmark Detection tracks the user’s hand in real time. Pressing a button zeros an origin at the hand’s current position, and the program tracks the vector from that origin to the hand. That vector is meant to control the robot’s endpoint. I extended it with a motion-capture mode that records a path with its timing, so speed is preserved.</p>
-<div class="ph">Demo GIF: hand tracking and origin vector</div>
+<div class="gallery"><img src="Pictures/Robot_Video_Control_1.gif" alt="Hand tracking demo" loading="lazy"><img src="Pictures/Robot_Video_Control_2.gif" alt="Hand tracking demo" loading="lazy"></div>
 <h2>4. Smoothing and spline interpolation</h2>
 <p>Recorded hand data is noisy. An exponential moving average (EMA) filter biases toward the previous value, so inaccurate spikes have less influence.</p>
 <div class="eq">s₀ = x₀
@@ -31,7 +31,7 @@ sₜ = α·xₜ + (1 − α)·sₜ₋₁,  t &gt; 0   (0 &lt; α &lt; 1)</div>
 <div class="ph">Plots: raw points, EMA-filtered points, smoothing spline</div>
 <h2>5. Physics simulation</h2>
 <p>To close the loop, I used PyBullet to simulate a robotic arm in a physics environment. I used a pre-built arm model and programmed it to follow the recorded path.</p>
-<div class="ph">Screenshots: PyBullet arm following the path</div>
+<video controls muted loop playsinline preload="metadata" src="Pictures/Robot_Video_Control_3.mp4"></video>
 <!-- Add: what you'd do next, challenges you hit, and any measured results. --></main>
 </div>
 <footer><div class="wrap">Daniel Nawrot, University of Toronto Mechanical Engineering &middot; <a href="https://github.com/DanielNawrot">GitHub</a></div></footer>
