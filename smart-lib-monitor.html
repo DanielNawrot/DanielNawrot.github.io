@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Smart LIB Incident Monitoring Interface | Daniel Nawrot</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'\\(',right:'\\)',display:false}]})"></script>
+</head>
+
+<body>
+    <div class="wrap">
+        <nav aria-label="Primary"><a href="index.html"><strong>Daniel Nawrot</strong></a>
+            <div class="links"><a href="index.html">Home</a><a href="projects.html" aria-current="page">Projects</a><a
+                    href="mailto:daniel.nawrot@mail.utoronto.ca">Contact</a></div>
+        </nav>
+
+        <main class="page"><a class="back" href="projects.html">&larr; All projects</a>
+            <h1>Smart LIB Incident Monitoring Interface</h1>
+            <p class="tags">Client project for Toronto Fire Services &middot; Embedded systems, requirements
+                engineering, concept design</p>
+
+            <dl class="glance">
+                <div>
+                    <dt>Role</dt>
+                    <dd>Team Lead</dd>
+                </div>
+                <div>
+                    <dt>Client</dt>
+                    <dd>Toronto Fire Services</dd>
+                </div>
+                <div>
+                    <dt>Team</dt>
+                    <dd>Team 49, 6 University of Toronto students</dd>
+                </div>
+                <div>
+                    <dt>Deliverable</dt>
+                    <dd>Conceptual Design Specification, April 2026</dd>
+                </div>
+                <div>
+                    <dt>Selected concept</dt>
+                    <dd>Electronic wristband with haptic alerts</dd>
+                </div>
+            </dl>
+
+            <p>Our client asked for an early warning device that tells first responders when an electric vehicle’s
+                battery is about to go into thermal runaway, a self-sustaining reaction that releases toxic gas and ends
+                in fire. We took the project from the first problem definition through requirements, 85 generated ideas,
+                three concepts and a final selection, then planned the hardware-in-the-loop test that will show whether
+                it works.</p>
+
+            <h2>The problem</h2>
+            <p>Lithium-ion battery fires in Toronto rose from 29 to 76 incidents per year between 2022 and 2024. When a
+                battery is damaged in a crash, it can enter thermal runaway (TR): rapid internal reactions that cause
+                large temperature increases, gas release and complete battery failure.</p>
+            <p>Fire crews currently detect TR with thermal cameras and gas meters, which means someone has to stay near
+                the vehicle and keep watching it. Meanwhile the vehicle’s battery management system (BMS) already
+                measures voltage, current and temperature, and those signals show signs of TR before it happens, giving
+                roughly 15 to 45 seconds of lead time before the thermal spike. That data is going unused. The gap is an
+                autonomous warning system that reads it.</p>
+            <p>We limited the scope to EV accidents in Toronto, indoors and outdoors, and to the period before TR.
+                Surviving the fire itself was out of scope.</p>
+            <figure class="img"><img src="Pictures/SmartLIB_Problem_Flow.png"
+                    alt="Timeline from EV accident to first responders being affected by advanced thermal runaway"
+                    loading="lazy">
+                <figcaption>How the hazard unfolds: the gap between TR starting and responders being close enough to be
+                    hurt is the window the device needs to use.</figcaption>
+            </figure>
+
+            <h2>Service environment</h2>
+            <p>We visited a Tesla dealership and interviewed a senior technician there to understand the vehicles, then
+                characterized the conditions the device must survive. Selected ranges:</p>
+            <div class="tw">
+                <table>
+                    <tr>
+                        <th>Condition</th>
+                        <th>Design range</th>
+                    </tr>
+                    <tr>
+                        <td>Operating temperature</td>
+                        <td>−30 to 56 °C, including heating from TR</td>
+                    </tr>
+                    <tr>
+                        <td>Corrosive gases during TR</td>
+                        <td>Hydrofluoric acid 1–200+ ppm; carbon monoxide 50–10,000 ppm; VOCs 100–5,000 ppm</td>
+                    </tr>
+                    <tr>
+                        <td>Water and snow</td>
+                        <td>0–4 mm/h, with an IP-67 rating required</td>
+                    </tr>
+                    <tr>
+                        <td>Shock</td>
+                        <td>Mechanical 0–50 G; electrostatic ±8 kV</td>
+                    </tr>
+                    <tr>
+                        <td>Electrical environment</td>
+                        <td>300–800 V battery proximity; 3–10 V/m radiated field during TR</td>
+                    </tr>
+                </table>
+            </div>
+            <p>We also mapped the interest holders, from the Fire Fighters Association of Ontario and the Office of the
+                Fire Marshal, who shape what counts as safe for the field, to towing and battery-recycling companies who
+                handle damaged EVs after the fire crews leave.</p>
+
+            <h2>Requirements</h2>
+            <p>We defined one primary function, to detect and indicate danger due to LIB thermal runaway in EVs, and
+                four secondary functions that support it.</p>
+            <figure class="img"><img src="Pictures/SmartLIB_Functions.png"
+                    alt="Primary function and four secondary functions of the device" loading="lazy"></figure>
+            <h3>Objectives</h3>
+            <p>Objectives are ranked by a pairwise comparison, with detection speed first and simplicity second.</p>
+            <div class="tw">
+                <table>
+                    <tr>
+                        <th>Objective</th>
+                        <th>Metric</th>
+                        <th class="c">Goal</th>
+                    </tr>
+                    <tr>
+                        <td>Detect TR onset as quickly as possible</td>
+                        <td>Alert lead time before the TR spike</td>
+                        <td class="c">≥ 11.6 s</td>
+                    </tr>
+                    <tr>
+                        <td>Be simple to operate</td>
+                        <td>First-time deployment success rate</td>
+                        <td class="c">≥ 90%</td>
+                    </tr>
+                    <tr>
+                        <td>Be light-weight</td>
+                        <td>Weight</td>
+                        <td class="c">≤ 1.36 kg</td>
+                    </tr>
+                    <tr>
+                        <td>Transmit data a long distance</td>
+                        <td>Distance from EV to user</td>
+                        <td class="c">≥ 20 m</td>
+                    </tr>
+                    <tr>
+                        <td>Have a long uptime</td>
+                        <td>Hours on one charge</td>
+                        <td class="c">≥ 24 h</td>
+                    </tr>
+                </table>
+            </div>
+            <p>The 11.6 s target comes from physics rather than preference. The recommended safety distance from the
+                battery is 20 m, and a firefighter carrying equipment at a fast walk covers it at about 1.72 m/s. Since
+                there are at least 15 s between the first prominent sign of TR and the spike, the detection and alert
+                chain has a fixed time budget:</p>
+            <div class="eq math">$$t_{\text{walk}}=\frac{20\ \text{m}}{1.72\ \text{m/s}}\approx 11.6\ \text{s},\qquad
+                t_{\text{alert}}\le 15\ \text{s}-11.6\ \text{s}=3.4\ \text{s}$$</div>
+            <h3>Constraints</h3>
+            <div class="tw">
+                <table>
+                    <tr>
+                        <th>Constraint</th>
+                        <th>Limit</th>
+                    </tr>
+                    <tr>
+                        <td>Detect and alert on TR</td>
+                        <td>T ≥ 150 °C, dT/dt ≥ 1 °C/s, or V = 0 V</td>
+                    </tr>
+                    <tr>
+                        <td>Shock resistant</td>
+                        <td>Operates after a drop of ≥ 100 mm (MIL-STD-810H)</td>
+                    </tr>
+                    <tr>
+                        <td>Temperature resistant</td>
+                        <td>Operates after 72 h at ≥ 49 °C and at ≤ −30 °C</td>
+                    </tr>
+                    <tr>
+                        <td>Waterproof</td>
+                        <td>IP-67 (IEC 60529)</td>
+                    </tr>
+                    <tr>
+                        <td>Inert to corrosive gases</td>
+                        <td>0% weight loss after 48 h of exposure</td>
+                    </tr>
+                </table>
+            </div>
+
+            <h2>From 85 ideas to three concepts</h2>
+            <p>We started with individual brainstorming, then used functional decomposition to reach 51 means of
+                fulfilling the secondary functions. A morphological chart combined them into 47 complete solutions.
+                Crazy 8s, blue-sky thinking and reverse thinking added 22 more, and SCAMPER brought the total to 85,
+                sorted into eight categories.</p>
+            <figure class="img"><img src="Pictures/SmartLIB_Idea_Generation.png"
+                    alt="Idea generation process growing from 32 means to 85 ideas across eight categories"
+                    loading="lazy"></figure>
+            <p>To narrow them down, we removed ideas that were infeasible, broke physics or were redundant, leaving 51.
+                Multivoting cut the list to 10, and a graphical decision chart scored those against the two
+                highest-priority objectives, detection speed and simplicity. The three in the top right became our
+                alternatives.</p>
+            <figure class="img"><img src="Pictures/SmartLIB_Idea_Selection.png"
+                    alt="Idea selection funnel from 85 ideas to 3" loading="lazy"></figure>
+            <figure class="img"><img src="Pictures/SmartLIB_Decision_Chart.png"
+                    alt="Graphical decision chart plotting ideas by speed of detection and simplicity" loading="lazy">
+                <figcaption>The strongest solutions were hybrids that converged on the same core, a predictive algorithm
+                    running on BMS data.</figcaption>
+            </figure>
+
+            <h2>The three concepts</h2>
+            <h3>1. Electronic wristband</h3>
+            <p>A butyl rubber wristband worn by firefighters. An OBD-II Bluetooth adapter plugged into the EV’s service
+                port streams BMS data to the band. A nRF52840 microcontroller runs a threshold-based algorithm, and when
+                TR is imminent a haptic motor vibrates and LEDs flash. An LTE Cat-M1 module uploads incident data to the
+                Toronto Fire Services database for post-incident analysis.</p>
+            <figure class="img"><img src="Pictures/SmartLIB_Wristband_Diagram.png"
+                    alt="Block diagram of the wristband from OBD-II port to alert system and cloud storage"
+                    loading="lazy"></figure>
+            <div class="gallery"><img src="Pictures/SmartLIB_Wristband_Render_1.png"
+                    alt="Annotated 3D rendering of the wristband with dimensions" loading="lazy"><img
+                    src="Pictures/SmartLIB_Wristband_Render_2.png"
+                    alt="Annotated 3D rendering of the wristband showing electronics casing, lights and strap"
+                    loading="lazy"></div>
+
+            <h3>2. Integrated emergency transmitter</h3>
+            <p>A transmitter built into the vehicle reads the BMS over the CAN bus and wakes up when an inertial sensor
+                or the CAN data detects a crash. It broadcasts over vehicle-to-everything (V2X) communication to a
+                handheld receiver, which runs a threshold algorithm and triggers audible and visual alarms, sized to
+                meet ISO 7731 and ISO 11428. Data is stored locally and uploaded when a network is available.</p>
+            <figure class="img"><img src="Pictures/SmartLIB_IET_Diagram.png"
+                    alt="Block diagram of the vehicle transmitter and handheld receiver" loading="lazy"></figure>
+            <div class="gallery"><img src="Pictures/SmartLIB_IET_Receiver_1.png"
+                    alt="3D rendering of the handheld receiver with dimensions" loading="lazy"><img
+                    src="Pictures/SmartLIB_IET_Receiver_2.png"
+                    alt="3D rendering of the handheld receiver with labelled display, speaker and buttons"
+                    loading="lazy"></div>
+
+            <h3>3. Remote neural network</h3>
+            <p>A sealed adapter plugs into the OBD-II port. A CAN transceiver feeds an ESP32-S3, which sends BMS data
+                over Bluetooth Low Energy to a firefighter’s phone or tablet. A cloud model trained on previous EV fire
+                data predicts TR and raises alerts through a website, which also visualizes the live data. The adapter
+                is housed in a PEEK case wrapped in silicone rubber and filled with aerogel to survive the environment.
+            </p>
+            <figure class="img"><img src="Pictures/SmartLIB_RNN_Diagram.png"
+                    alt="Data flow from the vehicle through the remote adapter and mobile device to the cloud prediction model"
+                    loading="lazy"></figure>
+            <figure class="img"><img src="Pictures/SmartLIB_RNN_Transmitter.png"
+                    alt="Annotated render of the OBD-II adapter with dimensions" loading="lazy"></figure>
+            <div class="gallery"><img src="Pictures/SmartLIB_RNN_Dashboard_1.png"
+                    alt="Thermal runaway monitoring dashboard concept showing device count and alerts"
+                    loading="lazy"><img src="Pictures/SmartLIB_RNN_Dashboard_2.png"
+                    alt="Dashboard concept showing temperature, voltage and current charts" loading="lazy"></div>
+
+            <h2>Choosing the wristband</h2>
+            <p>We compared the alternatives with a Pugh chart, using the wristband as the datum and scoring each other
+                design from −1 to +1 against every objective.</p>
+            <div class="tw">
+                <table>
+                    <tr>
+                        <th>Objective</th>
+                        <th class="c">Wristband</th>
+                        <th class="c">Integrated transmitter</th>
+                        <th class="c">Remote neural network</th>
+                    </tr>
+                    <tr>
+                        <td>Detect TR quickly</td>
+                        <td class="c">0</td>
+                        <td class="c">0</td>
+                        <td class="c">+1</td>
+                    </tr>
+                    <tr>
+                        <td>Simple to operate</td>
+                        <td class="c">0</td>
+                        <td class="c">−1</td>
+                        <td class="c">−1</td>
+                    </tr>
+                    <tr>
+                        <td>Light-weight</td>
+                        <td class="c">0</td>
+                        <td class="c">−1</td>
+                        <td class="c">0</td>
+                    </tr>
+                    <tr>
+                        <td>Long transmission distance</td>
+                        <td class="c">0</td>
+                        <td class="c">0</td>
+                        <td class="c">0</td>
+                    </tr>
+                    <tr>
+                        <td>Long uptime</td>
+                        <td class="c">0</td>
+                        <td class="c">0</td>
+                        <td class="c">−1</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Total</strong></td>
+                        <td class="c"><strong>0</strong></td>
+                        <td class="c"><strong>−2</strong></td>
+                        <td class="c"><strong>−1</strong></td>
+                    </tr>
+                </table>
+            </div>
+            <p>The wristband won on simplicity, which matters most in a high-stress scene. There’s nothing to configure,
+                and firefighters in gloves don’t need fingertip access to a screen. Vibration is also one of the most
+                reliable ways to get a firefighter’s attention.</p>
+            <div class="callout">
+                <p><strong>The trade-off.</strong> A fixed-threshold algorithm is less accurate and less predictive than
+                    the neural network, and a wireless link can be unreliable near interference. We accepted this for
+                    operational simplicity, and the validation test is designed to check whether the speed holds up.</p>
+            </div>
+
+            <h2>The proposed design</h2>
+            <p>The wristband houses an nRF52840 microcontroller, an LTE Cat-M1 module, a vibration motor, LEDs and a
+                1000 mAh lithium-polymer battery in a butyl rubber shell. We chose butyl rubber because it is shock
+                absorbing, heat resistant, waterproof and inert to the corrosive gases released during TR. The band is
+                about 85 × 90 × 12 mm.</p>
+            <p>Checking the design against the objectives, using component data sheets and published figures:</p>
+            <div class="tw">
+                <table>
+                    <tr>
+                        <th>Objective</th>
+                        <th class="c">Goal</th>
+                        <th class="c">Estimate</th>
+                    </tr>
+                    <tr>
+                        <td>Detection time</td>
+                        <td class="c">≤ 3.4 s</td>
+                        <td class="c">~0.1 s reported for the chosen algorithm</td>
+                    </tr>
+                    <tr>
+                        <td>Weight</td>
+                        <td class="c">≤ 1.36 kg</td>
+                        <td class="c">~112 g (0.25 lb)</td>
+                    </tr>
+                    <tr>
+                        <td>Transmission distance</td>
+                        <td class="c">≥ 20 m</td>
+                        <td class="c">Up to 100 m (Class 1 Bluetooth)</td>
+                    </tr>
+                    <tr>
+                        <td>Uptime</td>
+                        <td class="c">≥ 24 h</td>
+                        <td class="c">~27.5 h</td>
+                    </tr>
+                </table>
+            </div>
+            <p>Uptime comes from the battery capacity divided by the combined current draw of the microcontroller (6.3
+                mA) and the cellular module (30 mA):</p>
+            <div class="eq math">$$t=\frac{1000\ \text{mAh}}{(6.3+30)\ \text{mA}}\approx 27.5\ \text{h}$$</div>
+            <p>The vibration motor is specified at 5 m/s², the maximum an arm can handle according to Canadian
+                occupational health and safety guidance.</p>
+
+            <h2>Validation plan</h2>
+            <p>The success criterion is an alert lead time of at least 11.6 s. To measure it, we use
+                hardware-in-the-loop testing, a method common in EV battery development. An ESP32 microcontroller runs
+                the threshold algorithm and drives two LEDs and a vibration motor. A laptop replays a published dataset
+                of mechanically induced thermal runaway across several cell chemistries, sending voltage, temperature
+                and timestamps to the ESP32 over Bluetooth.</p>
+            <figure class="img"><img src="Pictures/SmartLIB_Validation_Pipeline.png"
+                    alt="Pipeline from BMS dataset to detection algorithm, wireless transmission, wristband and alert activation"
+                    loading="lazy"></figure>
+            <ol>
+                <li>The laptop connects to the ESP32 over Bluetooth using the PyBluez library.</li>
+                <li>The dataset is transmitted according to its timestamps, while the microcontroller tracks time
+                    independently.</li>
+                <li>The algorithm analyzes the incoming data on the microcontroller.</li>
+                <li>When thresholds are reached, the microcontroller activates the LEDs and vibration motor and records
+                    the time of activation.</li>
+                <li>The experiment is repeated for 10 datasets, each from 15 m away, and the times to alert are
+                    averaged.</li>
+            </ol>
+
+            <h2>Limitations and next steps</h2>
+            <p>The test setup replaces the OBD-II Bluetooth adapter with a laptop and doesn’t reproduce the
+                temperatures, gases or interference of a real incident. Ten datasets also cover only a small part of the
+                range of battery behaviour. The next steps are to integrate the real OBD-II adapter and run controlled
+                tests on real battery systems.</p>
+            <!-- Add: test results, your specific contributions, and the final presentation outcome. -->
+        </main>
+    </div>
+    <footer>
+        <div class="wrap">Daniel Nawrot, University of Toronto Mechanical Engineering &middot; <a
+                href="https://github.com/DanielNawrot">GitHub</a></div>
+    </footer>
+</body>
+
+</html>
